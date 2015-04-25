@@ -88,7 +88,7 @@ bash> rails server
 
 ### Создаем новый контакт frontend пока нет будем использовать Curl
 
-bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"contacts", "name-first":"Oleg", "name-last":"Kapranov", "email":"lugatex@yahoo.com"}}' http://212.26.132.49:2274/contacts
+bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"contacts", "name-first":"Oleg", "name-last":"Kapranov", "email":"lugatex@yahoo.com"}}' http://212.26.132.49:2273/contacts
 
 И мы должны увидеть что то в этом роде:
 
@@ -103,10 +103,10 @@ X-Request-Id: 6d2a34f2-8dd9-4c6d-8a84-c2e950b0d7b5
 X-Runtime: 0.234775
 Transfer-Encoding: chunked
 
-{"data":{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2274/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2274/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2274/contacts/1/phone-numbers"}}}}
+{"data":{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2273/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2273/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2273/contacts/1/phone-numbers"}}}}
 
 ### Теперь создадим для этого контакта номер телефона
-bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"phone-numbers", "links": {"contact": {"linkage": {"type": "contacts", "id":"1"}}}, "name":"cellphone", "phone-number":"(380) 99-717-06-09"}}' "http://212.26.132.49:2274/phone-numbers"
+bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"phone-numbers", "links": {"contact": {"linkage": {"type": "contacts", "id":"1"}}}, "name":"cellphone", "phone-number":"(380) 99-717-06-09"}}' "http://212.26.132.49:2273/phone-numbers"
 
 И снова увидем что то в этом роде:
 
@@ -121,11 +121,11 @@ X-Request-Id: e6e02771-31e0-47d8-ae1b-ed96a81aef5a
 X-Runtime: 0.030659
 Transfer-Encoding: chunked
 
-{"data":{"id":"1","name":"cellphone","phone-number":"(380) 99-717-06-09","type":"phone-numbers","links":{"self":"http://212.26.132.49:2274/phone-numbers/1","contact":{"self":"http://212.26.132.49:2274/phone-numbers/1/links/contact","related":"http://212.26.132.49:2274/phone-numbers/1/contact","linkage":{"type":"contacts","id":"1"}}}}}
+{"data":{"id":"1","name":"cellphone","phone-number":"(380) 99-717-06-09","type":"phone-numbers","links":{"self":"http://212.26.132.49:2273/phone-numbers/1","contact":{"self":"http://212.26.132.49:2273/phone-numbers/1/links/contact","related":"http://212.26.132.49:2273/phone-numbers/1/contact","linkage":{"type":"contacts","id":"1"}}}}}
 
 ### Теперь мы можем запросить все данные
 
-bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2274/contacts"
+bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2273/contacts"
 
 И увидем результат:
 
@@ -140,11 +140,11 @@ X-Request-Id: fc6206d0-e08e-4292-bfeb-8539bde53ce0
 X-Runtime: 0.006662
 Transfer-Encoding: chunked
 
-{"data":[{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2274/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2274/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2274/contacts/1/phone-numbers"}}}]}
+{"data":[{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2273/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2273/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2273/contacts/1/phone-numbers"}}}]}
 
 Напомню что поле phone_number id включено в links, но не в общем описании, его можно получить через запрос:
 
-bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2274/contacts?include=phone-numbers"
+bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2273/contacts?include=phone-numbers"
 
 HTTP/1.1 200 OK
 X-Frame-Options: SAMEORIGIN
@@ -157,11 +157,11 @@ X-Request-Id: 65680c49-fb3b-4222-b9f7-e9178596217b
 X-Runtime: 0.028035
 Transfer-Encoding: chunked
 
-{"data":[{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2274/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2274/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2274/contacts/1/phone-numbers","linkage":[{"type":"phone-numbers","id":"1"}]}}}],"included":[{"id":"1","name":"cellphone","phone-number":"(380) 99-717-06-09","type":"phone-numbers","links":{"self":"http://212.26.132.49:2274/phone-numbers/1","contact":{"self":"http://212.26.132.49:2274/phone-numbers/1/links/contact","related":"http://212.26.132.49:2274/phone-numbers/1/contact","linkage":{"type":"contacts","id":"1"}}}}]}
+{"data":[{"id":"1","name-first":"Oleg","name-last":"Kapranov","email":"lugatex@yahoo.com","twitter":null,"type":"contacts","links":{"self":"http://212.26.132.49:2273/contacts/1","phone-numbers":{"self":"http://212.26.132.49:2273/contacts/1/links/phone-numbers","related":"http://212.26.132.49:2273/contacts/1/phone-numbers","linkage":[{"type":"phone-numbers","id":"1"}]}}}],"included":[{"id":"1","name":"cellphone","phone-number":"(380) 99-717-06-09","type":"phone-numbers","links":{"self":"http://212.26.132.49:2273/phone-numbers/1","contact":{"self":"http://212.26.132.49:2273/phone-numbers/1/links/contact","related":"http://212.26.132.49:2273/phone-numbers/1/contact","linkage":{"type":"contacts","id":"1"}}}}]}
 
 И другие поля:
 
-bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2274/contacts?include=phone-numbers&fields%5Bcontacts%5D=name-first,name-last&fields%5Bphone-numbers%5D=name"
+bash> curl -i -H "Accept: application/vnd.api+json" "http://212.26.132.49:2273/contacts?include=phone-numbers&fields%5Bcontacts%5D=name-first,name-last&fields%5Bphone-numbers%5D=name"
 
 HTTP/1.1 200 OK
 X-Frame-Options: SAMEORIGIN
@@ -174,11 +174,11 @@ X-Request-Id: 39c8232c-1ed0-4a5f-9ac3-23bb4910ebab
 X-Runtime: 0.009657
 Transfer-Encoding: chunked
 
-{"data":[{"name-first":"Oleg","name-last":"Kapranov","type":"contacts","id":"1","links":{"self":"http://212.26.132.49:2274/contacts/1"}}],"included":[{"name":"cellphone","type":"phone-numbers","id":"1","links":{"self":"http://212.26.132.49:2274/phone-numbers/1"}}]}
+{"data":[{"name-first":"Oleg","name-last":"Kapranov","type":"contacts","id":"1","links":{"self":"http://212.26.132.49:2273/contacts/1"}}],"included":[{"name":"cellphone","type":"phone-numbers","id":"1","links":{"self":"http://212.26.132.49:2273/phone-numbers/1"}}]}
 
 ### Проверка validation Error
 
-bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"contacts", "name-first":"Oleg Kapranov", "email":"lugatex@yahoo.com"}}' http://212.26.132.49:2274/contacts
+bash> curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"contacts", "name-first":"Oleg Kapranov", "email":"lugatex@yahoo.com"}}' http://212.26.132.49:2273/contacts
 
 HTTP/1.1 422 Unprocessable Entity
 X-Frame-Options: SAMEORIGIN
