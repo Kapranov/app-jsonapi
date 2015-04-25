@@ -1,0 +1,1 @@
+AppJsonapi::Application.config.secret_key_base = '7f0e94351febc7bfd577cd8d7fa62841371b4e1e69fb1cee5a99537e06d3f851213e4c3fadd29c370fd61734724b580bad4c71ce82fa109ebc1b4702aa88a8fc'

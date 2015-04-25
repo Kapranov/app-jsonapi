@@ -1,0 +1,9 @@
+one:
+  contact_id: 1
+  name: MyString
+  phone_number: MyString
+
+two:
+  contact_id: 1
+  name: MyString
+  phone_number: MyString
